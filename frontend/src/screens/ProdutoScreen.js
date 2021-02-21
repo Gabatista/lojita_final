@@ -9,7 +9,7 @@ import { listaProdutoDetalhes } from '../actions/produtoActions'
 
 
 function ProdutoScreen({ match }){
-    const dispatch = useDispatch
+    const dispatch = useDispatch()
     const produtoDetalhes = useSelector(state => state.produtoDetalhes)
     const { loading, error, produto } = produtoDetalhes
 
@@ -20,76 +20,75 @@ function ProdutoScreen({ match }){
     return (
         <div>
             <Link to='/' className='btn btn-light my-3'> Voltar </Link>
-            {
-                loading ?
+            {loading ?
                     <Loader />
                     : error
-                    ? <Message variant='danger'>{error}</Message>
-                :(
+                        ? <Message variant='danger'>{error}</Message>
+                        :(
                             <Row>
-                <Col md={6}>
-                    <Image src={produto.imagem} alt={produto.nome} fluid />
-                </Col>
+                                <Col md={6}>
+                                    <Image src={produto.imagem} alt={produto.nome} fluid />
+                                </Col>
 
-                <Col md={3}>
-                    <ListGroup variant="flush">
-                        <ListGroup.Item>
-                            <h3>{ produto.nome }</h3>
-                        </ListGroup.Item>
+                                <Col md={3}>
+                                    <ListGroup variant="flush">
+                                        <ListGroup.Item>
+                                            <h3>{ produto.nome }</h3>
+                                        </ListGroup.Item>
 
-                    <ListGroup.Item>
-                        <Avaliacao value={produto.avaliacao} text={`${produto.num_avaliacao} avaliações`} color="#f8e825"/>
-                    </ListGroup.Item>
+                                        <ListGroup.Item>
+                                            <Avaliacao value={produto.avaliacao} text={`${produto.num_avaliacoes} avaliações`} color="#f8e825"/>
+                                        </ListGroup.Item>
 
-                    <ListGroup.Item>
-                        Preço: R${produto.preco}
-                    </ListGroup.Item>
+                                        <ListGroup.Item>
+                                            Preço: R${produto.preco}
+                                        </ListGroup.Item>
 
-                    <ListGroup.Item>
-                        Descrição: {produto.descricao}
-                    </ListGroup.Item>
+                                        <ListGroup.Item>
+                                            Descrição: {produto.descricao}
+                                        </ListGroup.Item>
 
-                    </ListGroup>
-                </Col>
+                                    </ListGroup>
+                                </Col>
 
-                <Col md={3}>
-                    <Card>
-                        <ListGroup variant="flush">
-                            <ListGroup.Item>
-                                <Row>
-                                    <Col>
-                                        Preço:
-                                    </Col>
+                                <Col md={3}>
+                                    <Card>
+                                        <ListGroup variant="flush">
+                                        <ListGroup.Item>
+                                            <Row>
+                                                <Col>
+                                                    Preço:
+                                                </Col>
 
-                                    <Col>
-                                        <strong>${produto.preco}</strong>
-                                    </Col>
-                                </Row>
-                            </ListGroup.Item>
+                                                <Col>
+                                                    <strong>R${produto.preco}</strong>
+                                                </Col>
+                                            </Row>
+                                        </ListGroup.Item>
 
-                            <ListGroup.Item>
-                                <Row>
-                                    <Col>
-                                        Estoque:
-                                    </Col>
+                                        <ListGroup.Item>
+                                            <Row>
+                                                <Col>
+                                                    Estoque:
+                                                </Col>
 
-                                    <Col>
-                                        <strong>{produto.estoque > 0 ? 'Disponível' : 'Indisponível'}</strong>
-                                    </Col>
-                                </Row>
-                            </ListGroup.Item>
+                                                <Col>
+                                                    <strong>{produto.num_estoque > 0 ? 'Disponível' : 'Indisponível'}</strong>
+                                                </Col>
+                                            </Row>
+                                        </ListGroup.Item>
 
 
-                            <ListGroup.Item>
-                                <Button className='btn-block' disabled={produto.estoque == 0}type='button'>
-                                    Adicionar ao carrinho
-                                </Button>
-                            </ListGroup.Item>
+                                        <ListGroup.Item>
+                                            <Button className='btn-block' disabled={produto.num_estoque == 0}type='button'>
+                                                Adicionar ao carrinho
+                                            </Button>
+                                        </ListGroup.Item>
 
-                        </ListGroup>
-                    </Card>
-                </Col>
-            </Row>
+                                    </ListGroup>
+                                </Card>
+                            </Col>
+                        </Row>
                 )
             }
 

@@ -13,7 +13,8 @@ import {
 export const listaProdutos = () => async (dispatch) => {
     try{
 
-        dispatch({type:PRODUTO_LISTA_REQUEST})
+        dispatch({ type:PRODUTO_LISTA_REQUEST })
+
         const { data } = await axios.get('/api/produtos/')
 
         dispatch({
@@ -34,8 +35,9 @@ export const listaProdutos = () => async (dispatch) => {
 export const listaProdutoDetalhes = (id) => async (dispatch) => {
     try{
 
-        dispatch({type:PRODUTO_DETALHES_REQUEST})
-        const { data } = await axios.get(`/api/produto/${id}`)
+        dispatch({ type:PRODUTO_DETALHES_REQUEST })
+
+        const { data } = await axios.get(`/api/produtos/${id}`)
 
         dispatch({
             type:PRODUTO_DETALHES_SUCCESS,

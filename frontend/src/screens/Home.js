@@ -9,12 +9,11 @@ import { listaProdutos } from '../actions/produtoActions'
 function Home(){
     const dispatch = useDispatch()
     const produtoLista = useSelector(state => state.produtoLista)
-    const {error, loading, produtos} = produtoLista
+    const {error, loading, produtos } = produtoLista
 
     useEffect(() => {
         dispatch(listaProdutos())
-
-    }, [])
+    }, [dispatch])
 
     return (
         <div>

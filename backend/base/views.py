@@ -13,7 +13,7 @@ def get_routes(request):
         'api/produtos/',
         'api/produtos/criar/',
         'api/produtos/enviar/',
-        'api/produtos/<id>/avaliacoesq',
+        'api/produtos/<id>/avaliacoes',
         'api/produtos/top/',
         'api/produtos/<id>/',
         'api/produtos/delete/<id>/',
