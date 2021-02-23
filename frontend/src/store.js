@@ -3,20 +3,31 @@ import thunk from 'redux-thunk'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import { produtoListaReducer, produtoDetalhesReducer } from './reducers/produtoReducers'
 import { carrinhoReducer } from './reducers/carrinhoReducers'
-
+import { usuarioLoginReducer, usuarioRegistroReducer, usuarioDetalhesReducer, usuarioAtualizaPerfilReducer } from './reducers/usuarioReducers'
 
 const reducer = combineReducers({
     produtoLista: produtoListaReducer,
     produtoDetalhes: produtoDetalhesReducer,
-    carrinho:carrinhoReducer,
+    carrinho: carrinhoReducer,
+    usuarioLogin: usuarioLoginReducer,
+    usuarioCadastro: usuarioRegistroReducer,
+    usuarioDetalhes: usuarioDetalhesReducer,
+    usuarioAtualizaPerfil: usuarioAtualizaPerfilReducer,
 })
 
 const carrinhoItensDeStorage = localStorage.getItem('carrinhoItens') ?
         JSON.parse(localStorage.getItem('carrinhoItens')) : []
 
+
+const usuarioInfoDeStorage = localStorage.getItem('usuarioInfo') ?
+        JSON.parse(localStorage.getItem('usuarioInfo')) : null
+
 const initialState = {
     carrinho: {
         carrinhoItens: carrinhoItensDeStorage
+    },
+    usuarioLogin: {
+        usuarioInfo: usuarioInfoDeStorage
     }
 }
 
