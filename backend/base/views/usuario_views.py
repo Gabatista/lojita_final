@@ -62,16 +62,16 @@ def get_usuarios(request):
 @api_view(['PUT'])
 @permission_classes([IsAuthenticated])
 def update_perfil(request):
-    user = request.user
-    serializer = UserSerializerWithToken(user, many=False)
+    usuario = request.user
+    serializer = UserSerializerWithToken(usuario, many=False)
     data = request.data
 
-    user.first_name = data['name']
-    user.username = data['email']
-    user.email = data['email']
+    usuario.first_name = data['name']
+    usuario.username = data['email']
+    usuario.email = data['email']
 
     if data['password'] != '':
-        user.password = make_password(data['password'])
+        usuario.password = make_password(data['password'])
 
-    user.save()
+    usuario.save()
     return Response(serializer.data)

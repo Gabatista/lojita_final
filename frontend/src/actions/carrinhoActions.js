@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { CARRINHO_AD_ITEM, CARRINHO_REMOVE_ITEM } from '../constants/carrinhoConstants'
+import { CARRINHO_AD_ITEM, CARRINHO_REMOVE_ITEM, SALVAR_ENDERECO_ENTREGA, CARRINHO_SALVAR_METODO_PAGAMENTO } from '../constants/carrinhoConstants'
 
 /*getstate recolhe qualquer parte do state, tipo useSelector, acessando a store */
 export const addCarrinho = (id, qtd) => async (dispatch, getState) => {
@@ -27,4 +27,22 @@ export const removerDoCarrinho = (id) => (dispatch,getState) => {
     })
 
     localStorage.setItem('carrinhoItens', JSON.stringify(getState().carrinho.carrinhoItens))
+}
+
+export const salvarEnderecoEntrega = (data) => (dispatch) => {
+    dispatch({
+        type:SALVAR_ENDERECO_ENTREGA,
+        payload: data,
+    })
+
+    localStorage.setItem('enderecoEntrega', JSON.stringify(data))
+}
+
+export const salvarMetodoPagamento = (data) => (dispatch) => {
+    dispatch({
+        type:CARRINHO_SALVAR_METODO_PAGAMENTO,
+        payload: data,
+    })
+
+    localStorage.setItem('metodo_pagamento', JSON.stringify(data))
 }

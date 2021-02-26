@@ -16,6 +16,7 @@ import {
         USUARIO_ATUALIZA_PERFIL_FAIL,
         USUARIO_ATUALIZA_PERFIL_RESET,
 } from '../constants/usuarioConstants'
+import { PEDIDO_LISTAR_PEDIDOS_REQUEST } from '../constants/pedidoConstants'
 
 export const login = (email, password) => async (dispatch) =>{
     try{
@@ -54,8 +55,9 @@ export const login = (email, password) => async (dispatch) =>{
 
 export const logout = () => (dispatch) => {
     localStorage.removeItem('usuarioInfo')
-    dispatch({type:USUARIO_LOGOUT})
-    dispatch({type: USUARIO_DETALHES_RESET})
+    dispatch({type:USUARIO_LOGOUT })
+    dispatch({type: USUARIO_DETALHES_RESET })
+    dispatch({type: PEDIDO_LISTAR_PEDIDOS_REQUEST })
 }
 
 export const cadastro = (name, email, password) => async (dispatch) =>{

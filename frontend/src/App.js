@@ -6,6 +6,10 @@ import ProdutoScreen from './screens/ProdutoScreen'
 import LoginScreen from './screens/LoginScreen'
 import CadastroScreen from './screens/CadastroScreen'
 import PerfilScreen from './screens/PerfilScreen'
+import EntregaScreen from './screens/EntregaScreen'
+import PagamentoScreen from './screens/PagamentoScreen'
+import FinalizaPedidoScreen from './screens/FinalizaPedidoScreen'
+import PedidoScreen from './screens/PedidoScreen'
 
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 import { Container } from 'react-bootstrap'
@@ -22,6 +26,10 @@ function App() {
                 <Route path='/profile' component={PerfilScreen} />
                 <Route path='/produto/:id' component={ProdutoScreen} />
                 <Route path='/carrinho/:id?' component={CarrinhoScreen} />
+                <Route path='/shipping' component={EntregaScreen} />
+                <Route path='/pagamento' component={PagamentoScreen} />
+                <Route path='/finalizarPedido' component={FinalizaPedidoScreen} />
+                <Route path='/pedido/:id' component={PedidoScreen} />
             </Container>
         </main>
         <Footer />

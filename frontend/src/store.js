@@ -4,6 +4,7 @@ import { composeWithDevTools } from 'redux-devtools-extension'
 import { produtoListaReducer, produtoDetalhesReducer } from './reducers/produtoReducers'
 import { carrinhoReducer } from './reducers/carrinhoReducers'
 import { usuarioLoginReducer, usuarioRegistroReducer, usuarioDetalhesReducer, usuarioAtualizaPerfilReducer } from './reducers/usuarioReducers'
+import { pedidoCriarReducer, pedidoDetalhesReducer, pedidoPagarReducer, pedidoListarReducer } from './reducers/pedidoReducers'
 
 const reducer = combineReducers({
     produtoLista: produtoListaReducer,
@@ -13,6 +14,11 @@ const reducer = combineReducers({
     usuarioCadastro: usuarioRegistroReducer,
     usuarioDetalhes: usuarioDetalhesReducer,
     usuarioAtualizaPerfil: usuarioAtualizaPerfilReducer,
+    pedidoCriar: pedidoCriarReducer,
+    pedidoDetalhes: pedidoDetalhesReducer,
+    pedidoPagar: pedidoPagarReducer,
+    pedidoListar: pedidoListarReducer,
+
 })
 
 const carrinhoItensDeStorage = localStorage.getItem('carrinhoItens') ?
@@ -22,9 +28,14 @@ const carrinhoItensDeStorage = localStorage.getItem('carrinhoItens') ?
 const usuarioInfoDeStorage = localStorage.getItem('usuarioInfo') ?
         JSON.parse(localStorage.getItem('usuarioInfo')) : null
 
+const enderecoEntregaDeStorage = localStorage.getItem('enderecoEntrega') ?
+        JSON.parse(localStorage.getItem('enderecoEntrega')) : {}
+
+
 const initialState = {
     carrinho: {
-        carrinhoItens: carrinhoItensDeStorage
+        carrinhoItens: carrinhoItensDeStorage,
+        enderecoEntrega: enderecoEntregaDeStorage
     },
     usuarioLogin: {
         usuarioInfo: usuarioInfoDeStorage

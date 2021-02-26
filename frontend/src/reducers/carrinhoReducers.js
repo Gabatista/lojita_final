@@ -1,7 +1,9 @@
-import { CARRINHO_AD_ITEM, CARRINHO_REMOVE_ITEM } from '../constants/carrinhoConstants'
+import { CARRINHO_AD_ITEM, CARRINHO_REMOVE_ITEM, SALVAR_ENDERECO_ENTREGA, CARRINHO_SALVAR_METODO_PAGAMENTO }
+from '../constants/carrinhoConstants'
+import { CARRINHO_LIMPAR } from '../constants/carrinhoConstants'
 
 
-export const carrinhoReducer = (state = { carrinhoItens:[] } , action) => {
+export const carrinhoReducer = (state = { carrinhoItens:[], enderecoEntrega: {} } , action) => {
     switch(action.type){
         case CARRINHO_AD_ITEM:
             const item = action.payload
@@ -30,6 +32,19 @@ export const carrinhoReducer = (state = { carrinhoItens:[] } , action) => {
 
             }
 
+        case SALVAR_ENDERECO_ENTREGA:
+            return {...state, enderecoEntrega: action.payload}
+
+        case CARRINHO_SALVAR_METODO_PAGAMENTO:
+            return{
+                ...state, metodo_pagamento: action.payload
+            }
+
+        case CARRINHO_LIMPAR:
+            return{
+                ...state,
+                carrinhoItens: []
+            }
 
         default:
             return state
