@@ -35,7 +35,7 @@ function PerfilScreen({history}){
         if(!usuarioInfo){
             history.push('/login')
         }else{
-            if (!usuario || !usuario.name || success){
+            if (!usuario || !usuario.name || success || usuarioInfo._id !== usuario._id){
                 dispatch({type:USUARIO_ATUALIZA_PERFIL_RESET})
                 dispatch(getUsuarioDetalhes('profile'))
                 dispatch(ListarPedidos())

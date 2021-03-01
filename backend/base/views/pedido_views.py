@@ -63,6 +63,14 @@ def getMeusPedidos(request):
 
 
 @api_view(['GET'])
+@permission_classes([IsAdminUser])
+def getPedidos(request):
+    pedidos = Pedido.objects.all()
+    serializer = PedidoSerializer(pedidos, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def getPedidoById(request, pk):
     usuario = request.user
@@ -88,6 +96,17 @@ def AtualizaParaPago(request, pk):
     pedido.pago_em = datetime.now()
     pedido.save()
     return Response('Pedido foi pago')
+
+
+@api_view(['PUT'])
+@permission_classes([IsAdminUser])
+def AtualizaParaEntregue(request, pk):
+    pedido = Pedido.objects.get(_id=pk)
+
+    pedido.status_entregue = True
+    pedido.data_entrega = datetime.now()
+    pedido.save()
+    return Response('Pedido foi entregue')
 
 
 

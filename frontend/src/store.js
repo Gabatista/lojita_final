@@ -1,10 +1,10 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
 import { composeWithDevTools } from 'redux-devtools-extension'
-import { produtoListaReducer, produtoDetalhesReducer } from './reducers/produtoReducers'
+import { produtoListaReducer, produtoDetalhesReducer, produtoApagarReducer, produtoCriarReducer, produtoAtualizarReducer } from './reducers/produtoReducers'
 import { carrinhoReducer } from './reducers/carrinhoReducers'
-import { usuarioLoginReducer, usuarioRegistroReducer, usuarioDetalhesReducer, usuarioAtualizaPerfilReducer } from './reducers/usuarioReducers'
-import { pedidoCriarReducer, pedidoDetalhesReducer, pedidoPagarReducer, pedidoListarReducer } from './reducers/pedidoReducers'
+import { usuarioLoginReducer, usuarioRegistroReducer, usuarioDetalhesReducer, usuarioAtualizaPerfilReducer, usuarioListarReducer, usuarioApagarReducer, usuarioAtualizarReducer } from './reducers/usuarioReducers'
+import { pedidoCriarReducer, pedidoDetalhesReducer, pedidoPagarReducer, pedidoListarReducer,pedidolistarTodosReducer,pedidoEntregarReducer  } from './reducers/pedidoReducers'
 
 const reducer = combineReducers({
     produtoLista: produtoListaReducer,
@@ -17,7 +17,15 @@ const reducer = combineReducers({
     pedidoCriar: pedidoCriarReducer,
     pedidoDetalhes: pedidoDetalhesReducer,
     pedidoPagar: pedidoPagarReducer,
-    pedidoListar: pedidoListarReducer,
+    pedidoLista: pedidoListarReducer,
+    usuarioListar: usuarioListarReducer,
+    usuarioApagar: usuarioApagarReducer,
+    usuarioAtualizar:usuarioAtualizarReducer,
+    produtoApagar: produtoApagarReducer,
+    produtoCriar: produtoCriarReducer,
+    produtoAtualizar: produtoAtualizarReducer,
+    pedidolistarTodos: pedidolistarTodosReducer,
+    pedidoEntregar:pedidoEntregarReducer
 
 })
 

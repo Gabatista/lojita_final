@@ -4,11 +4,11 @@ from django.contrib.auth.models import User
 class Produto(models.Model):
     usuario = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     nome = models.CharField(max_length=200, null=True, blank=True)
-    imagem = models.ImageField(null=True, blank=True)
+    imagem = models.ImageField(null=True, blank=True, default='/placeholder.png')
     marca = models.CharField(max_length=200, null=True, blank=True)
     categoria = models.CharField(max_length=200, null=True, blank=True)
     descricao = models.TextField(null=True, blank=True)
-    avaliacao = models.DecimalField(max_digits=7, decimal_places=2, blank=True)
+    avaliacao = models.DecimalField(max_digits=7, decimal_places=2, blank=True, null=True)
     num_avaliacoes = models.IntegerField(null=True, blank=True, default=0)
     preco = models.DecimalField(max_digits=7, decimal_places=2, blank=True)
     num_estoque = models.IntegerField(null=True, blank=True, default=0)

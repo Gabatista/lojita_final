@@ -5,15 +5,15 @@ import FormContainer from '../components/FormContainer'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
 import { Link } from 'react-router-dom'
-import { getPedidoDetalhes, pagarPedido } from '../actions/pedidoActions'
+import { getPedidoDetalhes, pagarPedido, entregarPedido } from '../actions/pedidoActions'
 import { PayPalButton } from 'react-paypal-button-v2'
-import { PEDIDO_PAGAR_RESET } from '../constants/pedidoConstants'
+import { PEDIDO_PAGAR_RESET,PEDIDO_DETALHES_RESET, PEDIDO_ENTREGUE_RESET } from '../constants/pedidoConstants'
 
-function PedidoScreen({match}){
+function PedidoScreen({match, history}){
     const pedidoId = match.params.id
     const dispatch = useDispatch()
 
-    //const [sdkReady, setSdkReady] = useState(false)
+    const [sdkReady, setSdkReady] = useState(false)
 
     const pedidoDetalhes = useSelector(state => state.pedidoDetalhes)
     const {pedido, error, loading} = pedidoDetalhes
@@ -21,44 +21,54 @@ function PedidoScreen({match}){
     const pedidoPagar = useSelector(state => state.pedidoPagar)
     const { loading:loadingPagar, success: successPagar } = pedidoPagar
 
+    const pedidoEntregar = useSelector(state => state.pedidoEntregar)
+    const { loading:loadingEntregar, success: successEntregar } = pedidoEntregar
+
+    const usuarioLogin = useSelector(state => state.usuarioLogin)
+    const { usuarioInfo } = usuarioLogin
+
     if (!loading && !error){
-        pedido.itensPreco = pedido.pedidoItens.reduce((acc, item) => acc + item.preco * item.qtd, 0).toFixed(2)
+        pedido.itensPreco = pedido.itensPedido.reduce((acc, item) => acc + item.preco * item.qtd, 0).toFixed(2)
     }
-    //chave da api PAYPAL AQUI
-    /*
+
     const addPayPalScript = () => {
         const script = document.createElement('script')
         script.type = 'text/javascript'
-        script.src = 'https://www.paypal.com/sdk/js?client-id=chave}'
+        script.src = 'https://www.paypal.com/sdk/js?client-id=Ae_n_hNgZQU9ApsmVN4yl570qsNVnkr7O74DqYBZIuEIawj4Z3msmhzmZ3QEj0ZtnBNgqzXJ1YS8_DGH'
         script.async = true
         script.onload = () =>{
             setSdkReady(true)
         }
         document.body.appendChild(script)
     }
-    */
+
     useEffect(() => {
-        if (!pedido || pedido._id !== Number(pedidoId)){
-            //disptach({type:PEDIDO_PAGAR_RESET})
-            dispatch(getPedidoDetalhes(pedidoId))
+        if(!usuarioInfo){
+            history.push('/login')
         }
-        /*else if (!pedido.status_pagamento){
+        if (!pedido || successPagar ||pedido._id !== Number(pedidoId) || successEntregar){
+            dispatch({type:PEDIDO_PAGAR_RESET})
+            dispatch(getPedidoDetalhes(pedidoId))
+            dispatch({type: PEDIDO_ENTREGUE_RESET})
+        }
+        else if (!pedido.status_pagamento){
             if(!window.paypal){
                 addPayPalScript()
             }else{
                 setSdkReady(true)
             }
         }
-        */
-    }, [dispatch, pedido, pedidoId])
 
-    //adicionar successPagar no if acima e junto do dispatch
-    /*
-        const successPagamentoHandler = (pagamentoResult) => {
+    }, [dispatch, pedido, pedidoId, successEntregar])
+
+
+    const successPagamentoHandler = (pagamentoResult) => {
             dispatch(pagarPedido(pedidoId, pagamentoResult))
-        }
-    */
+    }
 
+    const entregaHandler = () => {
+        dispatch(entregarPedido(pedido))
+    }
 
     return loading ? (
         <Loader />
@@ -110,11 +120,11 @@ function PedidoScreen({match}){
                            <h2>Itens do pedido</h2>
 
                            <p>
-                               {pedido.pedidoItens.length === 0 ? <Message variant='info'>
+                               {pedido.itensPedido.length === 0 ? <Message variant='info'>
                                     Pedido está vazio
                                </Message> : (
                                 <ListGroup variant='flush'>
-                                    {pedido.pedidoItens.map((item, index) => (
+                                    {pedido.itensPedido.map((item, index) => (
                                         <ListGroup.Item key={index}>
                                             <Row>
                                                 <Col md={1}>
@@ -194,10 +204,10 @@ function PedidoScreen({match}){
                                     </Col>
                                 </Row>
                             </ListGroup.Item>
-{/*
+
                             {!pedido.status_pagamento && (
                                 <ListGroup.Item>
-                                    {loadingPay && <Loader />}
+                                    {loadingPagar && <Loader />}
 
                                     {!sdkReady ? (
                                         <Loader />
@@ -207,8 +217,15 @@ function PedidoScreen({match}){
                                 </ListGroup.Item>
 
                             )}
-*/}
                         </ListGroup>
+                        {loadingEntregar && <Loader />}
+                        {usuarioInfo && usuarioInfo.isAdmin && pedido.status_pagamento && !pedido.status_entregue && (
+                            <ListGroup.Item>
+                                <Button type='button' className='btn btn-block' onClick={entregaHandler}>
+                                    Marcar pedido como entregue
+                                </Button>
+                            </ListGroup.Item>
+                        )}
                     </Card>
                 </Col>
             </Row>

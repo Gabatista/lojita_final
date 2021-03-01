@@ -2,7 +2,9 @@ import axios from 'axios'
 import { PEDIDO_CRIAR_REQUEST, PEDIDO_CRIAR_SUCCESS, PEDIDO_CRIAR_FAIL,
  PEDIDO_DETALHES_REQUEST,PEDIDO_DETALHES_SUCCESS,PEDIDO_DETALHES_FAIL,
  PEDIDO_PAGAR_REQUEST,PEDIDO_PAGAR_SUCCESS,PEDIDO_PAGAR_FAIL,PEDIDO_PAGAR_RESET,
- PEDIDO_LISTAR_PEDIDOS_REQUEST,PEDIDO_LISTAR_PEDIDOS_SUCCESS,PEDIDO_LISTAR_PEDIDOS_FAIL,PEDIDO_LISTAR_PEDIDOS_RESET}
+ PEDIDO_LISTAR_PEDIDOS_REQUEST,PEDIDO_LISTAR_PEDIDOS_SUCCESS,PEDIDO_LISTAR_PEDIDOS_FAIL,PEDIDO_LISTAR_PEDIDOS_RESET,
+ PEDIDO_LISTAR_REQUEST,PEDIDO_LISTAR_SUCCESS,PEDIDO_LISTAR_FAIL,PEDIDO_LISTAR_RESET,
+ PEDIDO_ENTREGUE_REQUEST,PEDIDO_ENTREGUE_SUCCESS,PEDIDO_ENTREGUE_FAIL,PEDIDO_ENTREGUE_RESET}
 from '../constants/pedidoConstants'
 import { CARRINHO_LIMPAR } from '../constants/carrinhoConstants'
 
@@ -143,6 +145,74 @@ export const ListarPedidos = () => async (dispatch, getState) =>{
     } catch (error){
         dispatch({
             type: PEDIDO_LISTAR_PEDIDOS_FAIL,
+            payload: error.response && error.response.data.detail
+                ? error.response.data.detail
+                : error.message,
+        })
+    }
+}
+
+export const ListarTodosPedidos = () => async (dispatch, getState) =>{
+    try{
+        dispatch({
+            type: PEDIDO_LISTAR_REQUEST
+        })
+
+        const{
+            usuarioLogin: { usuarioInfo },
+        } = getState()
+
+        const config = {
+            headers: {
+                'Content-type': 'application/json',
+                Authorization: `Bearer ${ usuarioInfo.token }`
+            }
+        }
+
+        const {data} = await axios.get(`/api/pedidos/`, config)
+
+        dispatch({
+            type:PEDIDO_LISTAR_SUCCESS,
+            payload: data
+        })
+
+    } catch (error){
+        dispatch({
+            type: PEDIDO_LISTAR_FAIL,
+            payload: error.response && error.response.data.detail
+                ? error.response.data.detail
+                : error.message,
+        })
+    }
+}
+
+export const entregarPedido = (pedido) => async (dispatch, getState) =>{
+    try{
+        dispatch({
+            type: PEDIDO_ENTREGUE_REQUEST
+        })
+
+        const{
+            usuarioLogin: { usuarioInfo },
+        } = getState()
+
+        const config = {
+            headers: {
+                'Content-type': 'application/json',
+                Authorization: `Bearer ${ usuarioInfo.token }`
+            }
+        }
+
+        const {data} = await axios.put(`/api/pedidos/${pedido._id}/entrega/`, {}, config)
+
+        dispatch({
+            type:PEDIDO_ENTREGUE_SUCCESS,
+            payload: data
+        })
+
+    } catch (error){
+        dispatch({
+            type: PEDIDO_ENTREGUE_FAIL,
             payload: error.response && error.response.data.detail
                 ? error.response.data.detail
                 : error.message,

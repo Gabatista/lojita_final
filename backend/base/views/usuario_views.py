@@ -59,6 +59,29 @@ def get_usuarios(request):
     serializer = UserSerializer(usuarios, many=True)
     return Response(serializer.data)
 
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def get_usuario_by_Id(request, pk):
+    usuario = User.objects.get(id=pk)
+    serializer = UserSerializer(usuario, many=False)
+    return Response(serializer.data)
+
+
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def update_usuario(request, pk):
+    usuario = User.objects.get(id=pk)
+
+    data = request.data
+    usuario.first_name = data['name']
+    usuario.username = data['email']
+    usuario.email = data['email']
+    usuario.is_staff = data['isAdmin']
+
+    usuario.save()
+    serializer = UserSerializer(usuario, many=False)
+    return Response(serializer.data)
+
 @api_view(['PUT'])
 @permission_classes([IsAuthenticated])
 def update_perfil(request):
@@ -75,3 +98,11 @@ def update_perfil(request):
 
     usuario.save()
     return Response(serializer.data)
+
+
+@api_view(['DELETE'])
+@permission_classes([IsAdminUser])
+def deleteUsuario(request, pk):
+    usuarioApagar = User.objects.get(id=pk)
+    usuarioApagar.delete()
+    return Response('Usuário apagado')
