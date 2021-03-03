@@ -2,15 +2,42 @@ from django.shortcuts import render
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
-from base.models import Produto
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from base.models import Produto, Analise
 from base.serializers import ProdutoSerializer
 from rest_framework import status
 
 @api_view(['GET'])
 def get_produtos(request):
-    produtos = Produto.objects.all()
+    query = request.query_params.get('keyword')
+    if query == None:
+        busca = ''
+
+    produtos = Produto.objects.filter(nome__icontains=query).order_by('-criado_em')
+    page = request.query_params.get('page')
+    paginator = Paginator(produtos, 5)
+
+    try:
+        produtos = paginator.page(page)
+    except PageNotAnInteger:
+        produtos = paginator.page(1)
+    except EmptyPage:
+        produtos = paginator.page(paginator.num_pages)
+
+    if page == None:
+        page = 1
+
+    page = int(page)
+
+    serializer = ProdutoSerializer(produtos, many=True)
+    return Response({'produtos': serializer.data, 'page': page, 'pages': paginator.num_pages})
+
+@api_view(['GET'])
+def getTopProdutos(request):
+    produtos = Produto.objects.filter(avaliacao__gte=4).order_by('-avaliacao')[0:5]
     serializer = ProdutoSerializer(produtos, many=True)
     return Response(serializer.data)
+
 
 @api_view(['GET'])
 def get_produto(request, pk):
@@ -68,3 +95,43 @@ def enviarImagem(request):
     produto.imagem = request.FILES.get('imagem')
     produto.save()
     return Response('Imagem enviada')
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def criarProdutoAnalise(request, pk):
+    usuario = request.user
+    produto = Produto.objects.get(_id=pk)
+    data = request.data
+
+    #analise já existe
+    jaExiste = produto.avaliacao_set.filter(usuario=usuario).exists()
+
+    if jaExiste:
+        conteudo = {'detail':'Produto já analisado'}
+        return Response(conteudo, status=status.HTTP_400_BAD_REQUEST)
+
+    #cliente enviou sem analise ou 0
+    elif data['avaliacao'] == 0:
+        conteudo = {'detail':'Por favor deixe uma nota'}
+        return Response(conteudo, status=status.HTTP_400_BAD_REQUEST)
+
+    #criar analise
+    else:
+        analise = Analise.objects.create(
+            usuario=usuario,
+            produto=produto,
+            nome=usuario.first_name,
+            avaliacao=data['avaliacao'],
+            comentario=data['comentario']
+        )
+
+        analises = produto.avaliacao_set.all()
+        produto.num_avaliacoes = len(analises)
+
+        total = 0
+        for t in analises:
+            total += t.avaliacao
+        produto.avaliacao = total / len(analises)
+        produto.save()
+
+        return Response('Análise enviada')

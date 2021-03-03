@@ -20,6 +20,15 @@ import {
     PRODUTO_ATUALIZAR_SUCCESS,
     PRODUTO_ATUALIZAR_FAIL,
     PRODUTO_ATUALIZAR_RESET,
+
+    PRODUTO_CRIAR_ANALISE_REQUEST,
+    PRODUTO_CRIAR_ANALISE_SUCCESS,
+    PRODUTO_CRIAR_ANALISE_FAIL,
+    PRODUTO_CRIAR_ANALISE_RESET,
+
+    PRODUTO_TOP_REQUEST,
+    PRODUTO_TOP_SUCCESS,
+    PRODUTO_TOP_FAIL,
 } from '../constants/produtoConstants'
 
 export const produtoListaReducer = (state = {produtos:[]}, action) => {
@@ -28,16 +37,14 @@ export const produtoListaReducer = (state = {produtos:[]}, action) => {
             return {loading:true, produtos: []}
 
         case PRODUTO_LISTA_SUCCESS:
-            return {loading:false, produtos: action.payload }
+            return {loading:false, produtos: action.payload.produtos, page:action.payload.page, pages:action.payload.pages }
 
         case PRODUTO_LISTA_FAIL:
             return {loading:false, error: action.payload }
 
         default:
             return state
-
     }
-
 }
 
 export const produtoDetalhesReducer = (state = {produto:{avaliacoesap:[]} }, action) => {
@@ -107,6 +114,43 @@ export const produtoAtualizarReducer = (state = {produto:{} } , action) => {
 
         case PRODUTO_ATUALIZAR_RESET:
             return{}
+
+        default:
+            return state
+
+    }
+}
+
+export const produtoAnaliseCriarReducer = (state = {} , action) => {
+    switch(action.type){
+        case PRODUTO_CRIAR_ANALISE_REQUEST:
+            return {loading:true }
+
+        case PRODUTO_CRIAR_ANALISE_SUCCESS:
+            return {loading:false, success: true }
+
+        case PRODUTO_CRIAR_ANALISE_FAIL:
+            return {loading:false, error: action.payload }
+
+        case PRODUTO_CRIAR_ANALISE_RESET:
+            return{}
+
+        default:
+            return state
+
+    }
+}
+
+export const produtoTopAvaliadoReducer = (state = {produtos:[]} , action) => {
+    switch(action.type){
+        case PRODUTO_TOP_REQUEST:
+            return {loading:true, produtos: [] }
+
+        case PRODUTO_TOP_SUCCESS:
+            return {loading:false, produtos: action.payload }
+
+        case PRODUTO_TOP_FAIL:
+            return {loading:false, error: action.payload }
 
         default:
             return state

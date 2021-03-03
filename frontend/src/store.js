@@ -1,7 +1,7 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
 import { composeWithDevTools } from 'redux-devtools-extension'
-import { produtoListaReducer, produtoDetalhesReducer, produtoApagarReducer, produtoCriarReducer, produtoAtualizarReducer } from './reducers/produtoReducers'
+import { produtoListaReducer, produtoDetalhesReducer, produtoApagarReducer, produtoCriarReducer, produtoAtualizarReducer,produtoAnaliseCriarReducer, produtoTopAvaliadoReducer } from './reducers/produtoReducers'
 import { carrinhoReducer } from './reducers/carrinhoReducers'
 import { usuarioLoginReducer, usuarioRegistroReducer, usuarioDetalhesReducer, usuarioAtualizaPerfilReducer, usuarioListarReducer, usuarioApagarReducer, usuarioAtualizarReducer } from './reducers/usuarioReducers'
 import { pedidoCriarReducer, pedidoDetalhesReducer, pedidoPagarReducer, pedidoListarReducer,pedidolistarTodosReducer,pedidoEntregarReducer  } from './reducers/pedidoReducers'
@@ -25,7 +25,9 @@ const reducer = combineReducers({
     produtoCriar: produtoCriarReducer,
     produtoAtualizar: produtoAtualizarReducer,
     pedidolistarTodos: pedidolistarTodosReducer,
-    pedidoEntregar:pedidoEntregarReducer
+    pedidoEntregar:pedidoEntregarReducer,
+    produtoAnaliseCriar: produtoAnaliseCriarReducer,
+    produtoTopAvaliado: produtoTopAvaliadoReducer
 
 })
 

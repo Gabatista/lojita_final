@@ -24,6 +24,7 @@ class Analise(models.Model):
     nome = models.CharField(max_length=200, null=True, blank=True)
     avaliacao = models.IntegerField(null=True, blank=True, default=0)
     comentario = models.TextField(null=True, blank=True)
+    criado_em = models.DateTimeField(auto_now_add=True)
     _id = models.AutoField(primary_key=True, editable=False)
 
     def __str__(self):

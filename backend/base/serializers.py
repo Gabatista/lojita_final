@@ -1,8 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from rest_framework_simplejwt.tokens import RefreshToken
-from .models import Produto, Pedido, ItemPedido, EnderecoEntrega
-
+from .models import Produto, Pedido, ItemPedido, EnderecoEntrega, Analise
 
 class UserSerializer(serializers.ModelSerializer):
     name = serializers.SerializerMethodField(read_only=True)
@@ -38,9 +37,20 @@ class UserSerializerWithToken(UserSerializer):
 
 
 class ProdutoSerializer(serializers.ModelSerializer):
+    analises = serializers.SerializerMethodField(read_only=True)
     class Meta:
         model = Produto
         fields = '__all__'
+
+    def get_analises(self, obj):
+        analises = obj.analise_set.all()
+        serializer = AnaliseSerializer(analises, many=True)
+        return serializer.data
+
+class AnaliseSerializer(serializers.ModelSerializer):
+    class Meta:
+          model = Analise
+          fields = '__all__'
 
 class PedidoSerializer(serializers.ModelSerializer):
     itensPedido = serializers.SerializerMethodField(read_only=True)

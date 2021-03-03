@@ -3,6 +3,7 @@ import { Navbar, Nav, Container, Row, NavDropdown} from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import { logout } from '../actions/usuarioActions'
+import  CaixaBusca  from './CaixaBusca'
 
 function Header(){
     const usuarioLogin = useSelector(state => state.usuarioLogin)
@@ -22,6 +23,7 @@ function Header(){
                     </LinkContainer>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav">
+                        <CaixaBusca/>
                         <Nav className="mr-auto">
 
                             <LinkContainer to='/carrinho'>

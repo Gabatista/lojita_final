@@ -21,14 +21,23 @@ import {
     PRODUTO_ATUALIZAR_FAIL,
     PRODUTO_ATUALIZAR_RESET,
 
+    PRODUTO_CRIAR_ANALISE_REQUEST,
+    PRODUTO_CRIAR_ANALISE_SUCCESS,
+    PRODUTO_CRIAR_ANALISE_FAIL,
+    PRODUTO_CRIAR_ANALISE_RESET,
+
+    PRODUTO_TOP_REQUEST,
+    PRODUTO_TOP_SUCCESS,
+    PRODUTO_TOP_FAIL,
+
 } from '../constants/produtoConstants'
 
-export const listaProdutos = () => async (dispatch) => {
+export const listaProdutos = (keyword='') => async (dispatch) => {
     try{
 
         dispatch({ type:PRODUTO_LISTA_REQUEST })
 
-        const { data } = await axios.get('/api/produtos/')
+        const { data } = await axios.get(`/api/produtos${keyword}`)
 
         dispatch({
             type:PRODUTO_LISTA_SUCCESS,
@@ -38,6 +47,28 @@ export const listaProdutos = () => async (dispatch) => {
     }catch(error){
         dispatch({
             type: PRODUTO_LISTA_FAIL,
+            payload: error.response && error.response.data.detail
+                ? error.response.data.detail
+                : error.message,
+        })
+    }
+}
+
+export const listaTopProdutos = () => async (dispatch) => {
+    try{
+
+        dispatch({ type:PRODUTO_TOP_REQUEST })
+
+        const { data } = await axios.get(`/api/produtos/top/`)
+
+        dispatch({
+            type:PRODUTO_TOP_SUCCESS,
+            payload:data
+        })
+
+    }catch(error){
+        dispatch({
+            type: PRODUTO_TOP_FAIL,
             payload: error.response && error.response.data.detail
                 ? error.response.data.detail
                 : error.message,
@@ -163,6 +194,40 @@ export const atualizarProduto = (produto) => async (dispatch, getState) =>{
     } catch (error){
         dispatch({
             type: PRODUTO_ATUALIZAR_FAIL,
+            payload: error.response && error.response.data.detail
+                ? error.response.data.detail
+                : error.message,
+        })
+    }
+}
+
+export const criarProdutoAnalise = (produtoId, analise) => async (dispatch, getState) =>{
+    try{
+        dispatch({
+            type: PRODUTO_CRIAR_ANALISE_REQUEST
+        })
+
+        const{
+            usuarioLogin: { usuarioInfo },
+        } = getState()
+
+        const config = {
+            headers: {
+                'Content-type': 'application/json',
+                Authorization: `Bearer ${ usuarioInfo.token }`
+            }
+        }
+
+        const {data} = await axios.post(`/api/produtos/${produtoId}/analises/`, analise, config)
+
+        dispatch({
+            type:PRODUTO_CRIAR_ANALISE_SUCCESS,
+            payload: data,
+        })
+
+    } catch (error){
+        dispatch({
+            type: PRODUTO_CRIAR_ANALISE_FAIL,
             payload: error.response && error.response.data.detail
                 ? error.response.data.detail
                 : error.message,
