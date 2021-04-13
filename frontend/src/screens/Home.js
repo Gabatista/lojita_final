@@ -13,8 +13,8 @@ function Home({history}){
     const produtoLista = useSelector(state => state.produtoLista)
     const {error, loading, produtos, page, pages } = produtoLista
 
-
     let keyword = history.location.search
+
     useEffect(() => {
         dispatch(listaProdutos(keyword))
     }, [dispatch,keyword])
@@ -22,7 +22,7 @@ function Home({history}){
     return (
         <div>
             {!keyword && <ProdutoCarousel />}
-            <ProdutoCarousel />
+
             <h1>Últimas novidades</h1>
             {loading ? <Loader />
                 : error ? <Message variant='danger'>{error}</Message>

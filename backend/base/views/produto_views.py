@@ -13,7 +13,7 @@ def get_produtos(request):
     if query == None:
         busca = ''
 
-    produtos = Produto.objects.filter(nome__icontains=query).order_by('-criado_em')
+    produtos = Produto.objects.filter(nome__icontains=busca).order_by('-criado_em')
     page = request.query_params.get('page')
     paginator = Paginator(produtos, 5)
 
